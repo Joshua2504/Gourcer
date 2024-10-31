@@ -26,8 +26,5 @@ cat ${tmp_dir}/gource-* | sort -n > ${tmp_dir}/combined.txt
 gource ${tmp_dir}/combined.txt --seconds-per-day 5 --auto-skip-seconds 0.1 --title "$title" --disable-auto-rotate --camera-mode overview --user-friction 1 --max-user-speed 15 --filename-time 5 --highlight-users --time-scale 4 --user-scale 1.2 --hide usernames -${resolution} -o - | \
 ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 5 -threads 0 -bf 0 "$output_file"
 
-# Delete the uncompressed file
-rm "$uncompressed_file"
-
 # Delete the custom logs
 rm -r "$tmp_dir"
