@@ -54,12 +54,10 @@ gource ${tmp_dir}/combined.txt \
     --highlight-dirs \
     --dir-name-depth 2 \
     --key \
-    --file-extensions \
     --highlight-users \
     --highlight-dirs \
     --dir-name-position 1 \
     --dir-name-depth 3 \
-    --file-extensions \
     --bloom-multiplier 1.5 \
     --bloom-intensity 0.5 \
     $hide_option \
