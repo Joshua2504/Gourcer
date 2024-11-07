@@ -7,6 +7,7 @@ output_file="gource.mp4"
 compression_level="10"
 hide_usernames=false
 time_scale="4"  # max is 4
+seconds_per_day="1"
 
 # Define username replacements
 original_usernames=("Joshua Treudler" "Shaiko" "manuoderso" /* add up to 200 usernames here */)
@@ -61,7 +62,7 @@ fi
 
 # Generate the Gource visualization video with additional details
 gource ${tmp_dir}/combined.txt \
-    --seconds-per-day 2 \
+    --seconds-per-day "$seconds_per_day" \
     --auto-skip-seconds 0.1 \
     --title "$title" \
     --disable-auto-rotate \
