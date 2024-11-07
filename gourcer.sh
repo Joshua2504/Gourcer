@@ -6,7 +6,7 @@ title="Development Visualization"
 resolution="600x338"
 output_file="gource.mp4"
 compression_level="10"  # Add compression level
-hide_usernames=true  # Add hide usernames parameter
+hide_usernames=false  # Change hide usernames parameter to false
 
 # Create a temporary directory within the project directory
 tmp_dir="/tmp/gourcer"
