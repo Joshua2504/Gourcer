@@ -46,7 +46,7 @@ gource ${tmp_dir}/combined.txt \
     --camera-mode overview \
     --user-friction 1 \
     --max-user-speed 15 \
-    --filename-time 5 \
+    --filename-time 20 \
     --highlight-users \
     --time-scale 4 \
     --user-scale 1.2 \
