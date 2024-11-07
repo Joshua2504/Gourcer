@@ -8,6 +8,10 @@ output_file="gource.mp4"
 compression_level="10"  # Add compression level
 hide_usernames=false  # Change hide usernames parameter to false
 
+# Define username replacement
+original_username="Joshua Treudler"
+new_username="Francis"
+
 # Create a temporary directory within the project directory
 tmp_dir="/tmp/gourcer"
 mkdir -p "$tmp_dir"
@@ -23,6 +27,9 @@ done
 
 # Combine all Gource logs into one
 cat ${tmp_dir}/gource-* | sort -n > ${tmp_dir}/combined.txt
+
+# Replace usernames in the combined.txt file
+sed -i '' "s/${original_username}/${new_username}/g" ${tmp_dir}/combined.txt
 
 # Determine the hide usernames option
 if [ "$hide_usernames" = true ]; then
