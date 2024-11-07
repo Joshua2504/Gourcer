@@ -6,6 +6,7 @@ resolution="1280x720"
 output_file="gource.mp4"
 compression_level="10"
 hide_usernames=false
+time_scale="4"  # max is 4
 
 # Define username replacements
 original_usernames=("Joshua Treudler" "Shaiko" "manuoderso" /* add up to 200 usernames here */)
@@ -60,7 +61,7 @@ fi
 
 # Generate the Gource visualization video with additional details
 gource ${tmp_dir}/combined.txt \
-    --seconds-per-day 5 \
+    --seconds-per-day 2 \
     --auto-skip-seconds 0.1 \
     --title "$title" \
     --disable-auto-rotate \
@@ -69,7 +70,7 @@ gource ${tmp_dir}/combined.txt \
     --max-user-speed 15 \
     --filename-time 20 \
     --highlight-users \
-    --time-scale 4 \
+    --time-scale "$time_scale" \
     --user-scale 1.2 \
     --file-idle-time 0 \
     --highlight-dirs \
