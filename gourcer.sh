@@ -8,12 +8,8 @@ compression_level="10"
 hide_usernames=false
 
 # Define username replacements
-original_username1="Joshua Treudler"
-new_username1="Francis"
-original_username2="Shaiko"
-new_username2="AdrianWho?"
-original_username3="manuoderso"
-new_username3="manu"
+original_usernames=("Joshua Treudler" "Shaiko" "manuoderso" /* add up to 200 usernames here */)
+new_usernames=("Francis" "AdrianWho?" "manu" /* add corresponding new usernames here */)
 
 # Create a temporary directory within the project directory
 tmp_dir="/tmp/gourcer"
@@ -36,9 +32,9 @@ done
 cat ${tmp_dir}/gource-* | sort -n > ${tmp_dir}/combined.txt
 
 # Replace usernames in the combined.txt file
-sed -i '' "s/${original_username1}/${new_username1}/g" ${tmp_dir}/combined.txt
-sed -i '' "s/${original_username2}/${new_username2}/g" ${tmp_dir}/combined.txt
-sed -i '' "s/${original_username3}/${new_username3}/g" ${tmp_dir}/combined.txt
+for i in "${!original_usernames[@]}"; do
+    sed -i '' "s/${original_usernames[$i]}/${new_usernames[$i]}/g" ${tmp_dir}/combined.txt
+done
 
 # Determine the hide usernames option
 if [ "$hide_usernames" = true ]; then
