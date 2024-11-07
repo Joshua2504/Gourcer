@@ -1,12 +1,11 @@
 #!/bin/bash
 
 # Define the Gource visualization settings
-# More settings can be set directly in the Gource command below
 title="Development Visualization"
 resolution="600x338"
 output_file="gource.mp4"
-compression_level="10"  # Add compression level
-hide_usernames=false  # Change hide usernames parameter to false
+compression_level="10"
+hide_usernames=false
 
 # Define username replacement
 original_username="Joshua Treudler"
@@ -38,8 +37,26 @@ else
     hide_option=""
 fi
 
-# Generate the Gource visualization video
-gource ${tmp_dir}/combined.txt --seconds-per-day 5 --auto-skip-seconds 0.1 --title "$title" --disable-auto-rotate --camera-mode overview --user-friction 1 --max-user-speed 15 --filename-time 5 --highlight-users --time-scale 4 --user-scale 1.2 $hide_option -${resolution} -o - | \
+# Generate the Gource visualization video with additional details
+gource ${tmp_dir}/combined.txt \
+    --seconds-per-day 5 \
+    --auto-skip-seconds 0.1 \
+    --title "$title" \
+    --disable-auto-rotate \
+    --camera-mode overview \
+    --user-friction 1 \
+    --max-user-speed 15 \
+    --filename-time 5 \
+    --highlight-users \
+    --time-scale 4 \
+    --user-scale 1.2 \
+    --file-idle-time 0 \
+    --highlight-dirs \
+    --dir-name-depth 2 \
+    --key \
+    --file-extensions \
+    $hide_option \
+    -${resolution} -o - | \
 ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf "$compression_level" -threads 0 -bf 0 "$output_file"
 
 # Delete the custom logs
