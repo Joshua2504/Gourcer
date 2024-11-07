@@ -2,7 +2,7 @@
 
 # Define the Gource visualization settings
 title="Development Visualization"
-resolution="1920x1080"
+resolution="1280x720"
 output_file="gource.mp4"
 compression_level="10"
 hide_usernames=false
