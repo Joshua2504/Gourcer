@@ -15,6 +15,10 @@ new_username="Francis"
 tmp_dir="/tmp/gourcer"
 mkdir -p "$tmp_dir"
 
+# Create a directory for custom avatars
+avatars_dir="./avatars"
+mkdir -p "$avatars_dir"
+
 # Find all Git repositories in the parent directory
 repos=$(find ../ -name ".git" -type d | sed 's/\/.git//')
 
@@ -61,6 +65,7 @@ gource ${tmp_dir}/combined.txt \
     --bloom-multiplier 1.5 \
     --bloom-intensity 0.5 \
     $hide_option \
+    --user-image-dir "$avatars_dir" \
     -${resolution} -o - | \
 ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf "$compression_level" -threads 0 -bf 0 "$output_file"
 
