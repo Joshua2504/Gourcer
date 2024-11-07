@@ -40,8 +40,11 @@ done
 
 # Generate captions from Git commit logs
 caption_file="${tmp_dir}/commitmsg.txt"
+# > "$caption_file"  # Do not clear the file before appending
 for repo in $repos; do
-    (cd "$repo" && git log --pretty=format:"%at|%an|%s" --reverse --no-merges --output "$caption_file")
+    echo "Processing repository: $repo"  # Debugging information
+    (cd "$repo" && git log --pretty=format:"%at|%an|%s" --reverse --no-merges) >> "$caption_file"
+    echo "Appended commits from $repo to $caption_file"  # Debugging information
 done
 
 # Replace usernames in the caption file
