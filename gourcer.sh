@@ -60,6 +60,8 @@ gource ${tmp_dir}/combined.txt \
     --dir-name-position 1 \
     --dir-name-depth 3 \
     --file-extensions \
+    --bloom-multiplier 1.5 \
+    --bloom-intensity 0.5 \
     $hide_option \
     -${resolution} -o - | \
 ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf "$compression_level" -threads 0 -bf 0 "$output_file"
