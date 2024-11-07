@@ -39,7 +39,12 @@ done
 # Generate captions from Git commit logs
 caption_file="${tmp_dir}/commitmsg.txt"
 for repo in $repos; do
-    (cd "$repo" && git log --pretty=format:"%at|%s" --reverse --no-merges --output "$caption_file")
+    (cd "$repo" && git log --pretty=format:"%at|%an|%s" --reverse --no-merges --output "$caption_file")
+done
+
+# Replace usernames in the caption file
+for i in "${!original_usernames[@]}"; do
+    sed -i '' "s/${original_usernames[$i]}/${new_usernames[$i]}/g" "$caption_file"
 done
 
 # Debug: Display the contents of the caption file
