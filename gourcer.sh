@@ -39,7 +39,7 @@ done
 # Generate captions from Git commit logs
 caption_file="${tmp_dir}/commitmsg.txt"
 for repo in $repos; do
-    (cd "$repo" && git log --pretty=format:"%at|%s" --reverse --no-merges) >> "$caption_file"
+    (cd "$repo" && git log --pretty=format:"%at|%s" --reverse --no-merges --output "$caption_file")
 done
 
 # Debug: Display the contents of the caption file
@@ -79,10 +79,10 @@ gource ${tmp_dir}/combined.txt \
     $hide_option \
     --user-image-dir "$avatars_dir" \
     --caption-file "$caption_file" \
-    --caption-size 24 \
+    --caption-size 16 \
     --caption-colour FFFFFF \
     --caption-duration 5 \
-    --caption-offset 0 \
+    --caption-offset 1 \
     -${resolution} -o - | \
 ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf "$compression_level" -threads 0 -bf 0 "$output_file"
 
