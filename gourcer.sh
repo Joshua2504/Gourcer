@@ -4,9 +4,9 @@
 title="Development Visualization"
 resolution="1280x720"
 output_file="gource.mp4"
-compression_level="10"
+compression_level="20"
 hide_usernames=false
-time_scale="4"  # max is 4
+time_scale="1"  # max is 4
 seconds_per_day="1"
 
 # Define username replacements
@@ -54,7 +54,7 @@ gource ${tmp_dir}/combined.txt \
     --camera-mode overview \
     --user-friction 1 \
     --max-user-speed 15 \
-    --filename-time 20 \
+    --filename-time 3 \
     --highlight-users \
     --time-scale "$time_scale" \
     --user-scale 1.2 \
@@ -66,8 +66,6 @@ gource ${tmp_dir}/combined.txt \
     --highlight-dirs \
     --dir-name-position 1 \
     --dir-name-depth 3 \
-    --bloom-multiplier 1.5 \
-    --bloom-intensity 0.5 \
     $hide_option \
     --user-image-dir "$avatars_dir" \
     -${resolution} -o - | \
