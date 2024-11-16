@@ -10,8 +10,8 @@ time_scale="1"  # max is 4
 seconds_per_day="1"
 
 # Define username replacements
-original_usernames=("Joshua Treudler" "Shaiko" "manuoderso" /* add up to 200 usernames here */)
-new_usernames=("Francis" "AdrianWho?" "manu" /* add corresponding new usernames here */)
+original_usernames=("Joshua Treudler" "Shaiko" "manuoderso" "Tobias" /* add up to 200 usernames here */)
+new_usernames=("Francis" "AdrianWho?" "manu" "Knight" /* add corresponding new usernames here */)
 
 # Create a temporary directory within the project directory
 tmp_dir="/tmp/gourcer"
