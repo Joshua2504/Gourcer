@@ -9,10 +9,6 @@ hide_usernames=false
 time_scale="1"  # max is 4
 seconds_per_day="1"
 
-# Define username replacements
-original_usernames=("Joshua Treudler" "Shaiko" "manuoderso" "Tobias" /* add up to 200 usernames here */)
-new_usernames=("Francis" "AdrianWho?" "manu" "Knight" /* add corresponding new usernames here */)
-
 # Create a temporary directory within the project directory
 tmp_dir="/tmp/gourcer"
 mkdir -p "$tmp_dir"
@@ -33,10 +29,12 @@ done
 # Combine all Gource logs into one
 cat ${tmp_dir}/gource-* | sort -n > ${tmp_dir}/combined.txt
 
-# Replace usernames in the combined.txt file
-for i in "${!original_usernames[@]}"; do
-    sed -i '' "s/${original_usernames[$i]}/${new_usernames[$i]}/g" ${tmp_dir}/combined.txt
-done
+# Check if usernames.conf exists and read username replacements if it does
+if [ -f usernames.conf ]; then
+    while IFS='=' read -r original_username new_username; do
+        sed -i '' "s/${original_username}/${new_username}/g" ${tmp_dir}/combined.txt
+    done < usernames.conf
+fi
 
 # Determine the hide usernames option
 if [ "$hide_usernames" = true ]; then
