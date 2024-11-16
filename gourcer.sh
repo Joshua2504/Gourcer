@@ -2,13 +2,12 @@
 
 # Define the Gource visualization settings
 title="Development Visualization"
-resolution="1920x1080"
+resolution="1280x720"
 output_file="gource.mp4"
 compression_level="20"
 hide_usernames=false
 time_scale="1"  # max is 4
 seconds_per_day="1.5"
-fps="60"
 
 # Create a temporary directory within the project directory
 tmp_dir="/tmp/gourcer"
@@ -68,7 +67,7 @@ gource ${tmp_dir}/combined.txt \
     $hide_option \
     --user-image-dir "$avatars_dir" \
     -${resolution} -o - | \
-ffmpeg -y -r "$fps" -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf "$compression_level" -threads 0 -bf 0 "$output_file"
+ffmpeg -y -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf "$compression_level" -threads 0 -bf 0 "$output_file"
 
 # Delete the custom logs
 rm -r "$tmp_dir"
