@@ -46,7 +46,7 @@ fi
 # Generate the Gource visualization video with additional details
 gource ${tmp_dir}/combined.txt \
     --seconds-per-day "$seconds_per_day" \
-    --auto-skip-seconds 0.1 \
+    --auto-skip-seconds 1 \
     --title "$title" \
     --disable-auto-rotate \
     --camera-mode overview \
@@ -55,7 +55,7 @@ gource ${tmp_dir}/combined.txt \
     --filename-time 3 \
     --highlight-users \
     --time-scale "$time_scale" \
-    --user-scale 1.2 \
+    --user-scale 1 \
     --file-idle-time 0 \
     --highlight-dirs \
     --dir-name-depth 2 \
