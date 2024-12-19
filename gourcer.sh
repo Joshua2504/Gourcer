@@ -62,13 +62,12 @@ gource ${tmp_dir}/combined.txt \
     --user-scale 1 \
     --file-idle-time 0 \
     --highlight-dirs \
-    --dir-name-depth 2 \
     --key \
     --highlight-users \
     --highlight-dirs \
     --dir-name-position 1 \
-    --dir-name-depth 3 \
-    --padding 4 \
+    --dir-name-depth 10 \
+    --padding 1 \
     $hide_option \
     --user-image-dir "$avatars_dir" \
     -${resolution} -o - | \
@@ -77,7 +76,9 @@ ffmpeg -y -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_
 # Check if background music file exists and conditionally add it to the video
 if [ -f "$background_music" ]; then
     ffmpeg -i "$output_file" -i "$background_music" -c:v copy -c:a aac -strict experimental -shortest "temp_$output_file"
-    mv "temp_$output_file" "$output_file"
+    if [ -f "temp_$output_file" ]; then
+        mv "temp_$output_file" "$output_file"
+    fi
 fi
 
 # Delete the temporary directory
