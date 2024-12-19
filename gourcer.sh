@@ -55,18 +55,17 @@ gource ${tmp_dir}/combined.txt \
     --disable-auto-rotate \
     --camera-mode overview \
     --user-friction 1 \
-    --max-user-speed 15 \
-    --filename-time 3 \
-    --highlight-users \
-    --time-scale "$time_scale" \
     --user-scale 1 \
+    --max-user-speed 15 \
+    --filename-time 5 \
+    --time-scale "$time_scale" \
     --file-idle-time 0 \
-    --highlight-dirs \
     --key \
     --highlight-users \
     --highlight-dirs \
     --dir-name-position 1 \
     --dir-name-depth 10 \
+    --caption-offset 5 \
     --padding 1 \
     $hide_option \
     --user-image-dir "$avatars_dir" \
