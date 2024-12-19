@@ -15,3 +15,14 @@ usernames.conf
 *.wav
 *.ogg
 *.flac
+
+# image files that are not inside the avatars directory
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.svg
+*.ico
+*.webp

@@ -5,6 +5,7 @@
 
 # Settings for the Gource visualization
 title="Development Visualization" # Title of the visualization (shown in the left-down corner)
+logo="./sylent-logo-med.png" # Path to the logo file (shown in the right-down corner)
 resolution="1280x720" # Resolution of the output video
 output_file="gource.mp4" # Output file name
 compression_level="20" # between 0 and 51 (lossless)
@@ -27,7 +28,7 @@ repos=$(find ../ -name ".git" -type d | sed 's/\/.git//')
 # Generate Gource logs for each repository
 for repo in $repos; do
     repo_name=$(basename "$repo")
-    gource --output-custom-log "${tmp_dir}/gource-${repo_name}.txt" "$repo"
+    gource --output-custom-log - "$repo" | awk -v repo="$repo_name" 'BEGIN {FS=OFS="|"} {$4=repo "/" $4}1' > "${tmp_dir}/gource-${repo_name}.txt"
 done
 
 # Combine all repository logs into a single log file
@@ -52,12 +53,12 @@ gource ${tmp_dir}/combined.txt \
     --seconds-per-day "$seconds_per_day" \
     --auto-skip-seconds 0.1 \
     --title "$title" \
-    --disable-auto-rotate \
     --camera-mode overview \
     --user-friction 1 \
-    --user-scale 1 \
+    --user-scale 1.1 \
     --max-user-speed 15 \
     --filename-time 5 \
+    --file-font-size 12 \
     --time-scale "$time_scale" \
     --file-idle-time 0 \
     --key \
@@ -65,8 +66,11 @@ gource ${tmp_dir}/combined.txt \
     --highlight-dirs \
     --dir-name-position 1 \
     --dir-name-depth 10 \
-    --caption-offset 5 \
+    --dir-font-size 16 \
+    --caption-offset 10 \
     --padding 1 \
+    --logo "$logo" \
+    --hide bloom \
     $hide_option \
     --user-image-dir "$avatars_dir" \
     -${resolution} -o - | \
