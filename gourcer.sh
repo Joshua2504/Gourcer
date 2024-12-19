@@ -1,16 +1,19 @@
 #!/bin/bash
 
-# Define the Gource visualization settings
-title="Development Visualization"
-resolution="1280x720"
-output_file="gource.mp4"
-compression_level="20"
-hide_usernames=false
-time_scale="1"  # max is 4
-seconds_per_day="0.5"
-background_music="music.mp3"  # Path to the background music file
+# Gourcer - A script to generate a Gource visualization of multiple Git repositories
+# Author: Joshua Tobias Treudler (Joshua2504)
 
-# Create a temporary directory within the project directory
+# Settings for the Gource visualization
+title="Development Visualization" # Title of the visualization (shown in the left-down corner)
+resolution="1280x720" # Resolution of the output video
+output_file="gource.mp4" # Output file name
+compression_level="20" # between 0 and 51 (lossless)
+hide_usernames=false # Set to true to hide usernames in the visualization
+time_scale="1" # between 0.1 and 4.0
+seconds_per_day="0.5" # between 0.1 and 4.0
+background_music="music.mp3" # Path to the background music file
+
+# Create a temporary directory
 tmp_dir="/tmp/gourcer"
 mkdir -p "$tmp_dir"
 
@@ -18,7 +21,7 @@ mkdir -p "$tmp_dir"
 avatars_dir="./avatars"
 mkdir -p "$avatars_dir"
 
-# Find all Git repositories in the parent directory
+# Find all Git repositories within the parent directory
 repos=$(find ../ -name ".git" -type d | sed 's/\/.git//')
 
 # Generate Gource logs for each repository
@@ -27,7 +30,7 @@ for repo in $repos; do
     gource --output-custom-log "${tmp_dir}/gource-${repo_name}.txt" "$repo"
 done
 
-# Combine all Gource logs into one
+# Combine all repository logs into a single log file
 cat ${tmp_dir}/gource-* | sort -n > ${tmp_dir}/combined.txt
 
 # Check if usernames.conf exists and read username replacements if it does
@@ -37,14 +40,14 @@ if [ -f usernames.conf ]; then
     done < usernames.conf
 fi
 
-# Determine the hide usernames option
+# Check if hide_usernames is set to true and set the appropriate option
 if [ "$hide_usernames" = true ]; then
     hide_option="--hide usernames"
 else
     hide_option=""
 fi
 
-# Generate the Gource visualization video with additional details
+# Generate the Gource visualization video with the specified settings
 gource ${tmp_dir}/combined.txt \
     --seconds-per-day "$seconds_per_day" \
     --auto-skip-seconds 0.1 \
@@ -65,16 +68,17 @@ gource ${tmp_dir}/combined.txt \
     --highlight-dirs \
     --dir-name-position 1 \
     --dir-name-depth 3 \
+    --padding 4 \
     $hide_option \
     --user-image-dir "$avatars_dir" \
     -${resolution} -o - | \
 ffmpeg -y -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf "$compression_level" -threads 0 -bf 0 -shortest "$output_file"
 
-# Check if background music file exists and add it to the video if it does
+# Check if background music file exists and conditionally add it to the video
 if [ -f "$background_music" ]; then
     ffmpeg -i "$output_file" -i "$background_music" -c:v copy -c:a aac -strict experimental -shortest "temp_$output_file"
     mv "temp_$output_file" "$output_file"
 fi
 
-# Delete the custom logs
+# Delete the temporary directory
 rm -r "$tmp_dir"
