@@ -68,7 +68,13 @@ gource ${tmp_dir}/combined.txt \
     $hide_option \
     --user-image-dir "$avatars_dir" \
     -${resolution} -o - | \
-ffmpeg -y -f image2pipe -vcodec ppm -i - -i "$background_music" -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf "$compression_level" -threads 0 -bf 0 -shortest "$output_file"
+ffmpeg -y -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf "$compression_level" -threads 0 -bf 0 -shortest "$output_file"
+
+# Check if background music file exists and add it to the video if it does
+if [ -f "$background_music" ]; then
+    ffmpeg -i "$output_file" -i "$background_music" -c:v copy -c:a aac -strict experimental -shortest "temp_$output_file"
+    mv "temp_$output_file" "$output_file"
+fi
 
 # Delete the custom logs
 rm -r "$tmp_dir"
