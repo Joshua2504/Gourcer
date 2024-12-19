@@ -22,3 +22,17 @@ Tobias=Knight
 ```
 
 ``Joshua Treudler`` would be displayed as *Francis*, ``Tobias`` as *Knight*.
+
+### Background Music
+
+You may set ``background_music`` to anything, for example:
+
+```
+background_music="music.mp3"
+```
+
+You can use ``ffmpeg`` to convert most file formats to mp3, e.g.:
+
+```
+ffmpeg -i music.ogg music.mp3
+```
