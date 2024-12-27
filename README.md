@@ -1,6 +1,6 @@
 # Gourcer (for gource)
 
-Gourcer is a simple script that generates a (https://github.com/acaudwell/Gource)[gource] video of all your repositories.
+Gourcer is a simple script that generates a [Gource](https://github.com/acaudwell/Gource) video of all your repositories.
 
 ## Usage
 
