@@ -10,8 +10,8 @@ resolution="1280x720" # Resolution of the output video
 output_file="gource.mp4" # Output file name
 compression_level="20" # between 0 and 51 (lossless)
 hide_usernames=false # Set to true to hide usernames in the visualization
-time_scale="1" # between 0.1 and 4.0
-seconds_per_day="0.5" # between 0.1 and 4.0
+time_scale="1.2" # between 0.1 and 4.0
+seconds_per_day="0.4" # between 0.1 and 4.0
 background_music="music.mp3" # Path to the background music file
 
 # Create a temporary directory
