@@ -1,6 +1,10 @@
 # video files
 gource.mp4
 
+# orgs
+org-config.conf
+org-repos/
+
 # macOS files
 .DS_Store
 

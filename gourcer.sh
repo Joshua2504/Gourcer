@@ -22,8 +22,12 @@ mkdir -p "$tmp_dir"
 avatars_dir="./avatars"
 mkdir -p "$avatars_dir"
 
-# Find all Git repositories within the parent directory
+# Find all Git repositories within the parent directory and org-repos directory
 repos=$(find ../ -name ".git" -type d | sed 's/\/.git//')
+if [ -d "./org-repos" ]; then
+    org_repos=$(find ./org-repos -name ".git" -type d | sed 's/\/.git//')
+    repos="$repos $org_repos"
+fi
 
 # Generate Gource logs for each repository
 for repo in $repos; do
