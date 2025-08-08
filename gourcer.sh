@@ -80,8 +80,8 @@ gource ${tmp_dir}/combined.txt \
     --user-friction 1 \
     --user-scale 1.1 \
     --max-user-speed 15 \
-    --filename-time 5 \
-    --file-font-size 12 \
+    --filename-time 3 \
+    --file-font-size 8 \
     --time-scale "$time_scale" \
     --file-idle-time 0 \
     --key \
