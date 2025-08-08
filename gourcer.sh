@@ -41,11 +41,17 @@ mkdir -p "$tmp_dir"
 # Create a directory for custom avatars
 mkdir -p "$avatars_dir"
 
-# Find all Git repositories within the parent directory and org-repos directory
-repos=$(find ../ -name ".git" -type d | sed 's/\/.git//')
+# Find all Git repositories within the org-repos directory only
+repos=""
 if [ -d "./org-repos" ]; then
-    org_repos=$(find ./org-repos -name ".git" -type d | sed 's/\/.git//')
-    repos="$repos $org_repos"
+    repos=$(find ./org-repos -name ".git" -type d | sed 's/\/.git//')
+    if [ -z "$repos" ]; then
+        echo "No Git repositories found in ./org-repos directory"
+        exit 1
+    fi
+else
+    echo "The ./org-repos directory does not exist"
+    exit 1
 fi
 
 # Generate Gource logs for each repository
@@ -114,7 +120,7 @@ gource ${tmp_dir}/combined.txt \
     --user-friction 1 \
     --user-scale 1.1 \
     --max-user-speed 15 \
-    --filename-time 3 \
+    --filename-time 2 \
     --file-font-size 8 \
     --time-scale "$time_scale" \
     --file-idle-time 0 \
