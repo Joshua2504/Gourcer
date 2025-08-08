@@ -117,9 +117,9 @@ gource ${tmp_dir}/combined.txt \
     --auto-skip-seconds 0.1 \
     --title "$title" \
     --camera-mode overview \
-    --user-friction 1 \
-    --user-scale 1.1 \
-    --max-user-speed 15 \
+    --user-friction 5 \
+    --user-scale 1.2 \
+    --max-user-speed 30 \
     --filename-time 2 \
     --file-font-size 8 \
     --time-scale "$time_scale" \
