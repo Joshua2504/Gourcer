@@ -1,17 +1,20 @@
 #!/bin/bash
 
-# Define the Gource visualization settings
-title="Development Visualization"
-resolution="1280x720"
-output_file="gource.mp4"
-compression_level="10"
-hide_usernames=false
+# Gourcer - A script to generate a Gource visualization of multiple Git repositories
+# Author: Joshua Tobias Treudler (Joshua2504)
 
-# Define username replacements
-original_usernames=("Joshua Treudler" "Shaiko" "manuoderso" /* add up to 200 usernames here */)
-new_usernames=("Francis" "AdrianWho?" "manu" /* add corresponding new usernames here */)
+# Settings for the Gource visualization
+title="Development Visualization" # Title of the visualization (shown in the left-down corner)
+logo="./sylent-logo-med.png" # Path to the logo file (shown in the right-down corner)
+resolution="1280x720" # Resolution of the output video
+output_file="gource.mp4" # Output file name
+compression_level="20" # between 0 and 51 (lossless)
+hide_usernames=false # Set to true to hide usernames in the visualization
+time_scale="1.2" # between 0.1 and 4.0
+seconds_per_day="0.4" # between 0.1 and 4.0
+background_music="music.mp3" # Path to the background music file
 
-# Create a temporary directory within the project directory
+# Create a temporary directory
 tmp_dir="/tmp/gourcer"
 mkdir -p "$tmp_dir"
 
@@ -19,57 +22,67 @@ mkdir -p "$tmp_dir"
 avatars_dir="./avatars"
 mkdir -p "$avatars_dir"
 
-# Find all Git repositories in the parent directory
+# Find all Git repositories within the parent directory
 repos=$(find ../ -name ".git" -type d | sed 's/\/.git//')
 
 # Generate Gource logs for each repository
 for repo in $repos; do
     repo_name=$(basename "$repo")
-    gource --output-custom-log "${tmp_dir}/gource-${repo_name}.txt" "$repo"
+    gource --output-custom-log - "$repo" | awk -v repo="$repo_name" 'BEGIN {FS=OFS="|"} {$4=repo "/" $4}1' > "${tmp_dir}/gource-${repo_name}.txt"
 done
 
-# Combine all Gource logs into one
+# Combine all repository logs into a single log file
 cat ${tmp_dir}/gource-* | sort -n > ${tmp_dir}/combined.txt
 
-# Replace usernames in the combined.txt file
-for i in "${!original_usernames[@]}"; do
-    sed -i '' "s/${original_usernames[$i]}/${new_usernames[$i]}/g" ${tmp_dir}/combined.txt
-done
+# Check if usernames.conf exists and read username replacements if it does
+if [ -f usernames.conf ]; then
+    while IFS='=' read -r original_username new_username; do
+        sed -i '' "s/${original_username}/${new_username}/g" ${tmp_dir}/combined.txt
+    done < usernames.conf
+fi
 
-# Determine the hide usernames option
+# Check if hide_usernames is set to true and set the appropriate option
 if [ "$hide_usernames" = true ]; then
     hide_option="--hide usernames"
 else
     hide_option=""
 fi
 
-# Generate the Gource visualization video with additional details
+# Generate the Gource visualization video with the specified settings
 gource ${tmp_dir}/combined.txt \
-    --seconds-per-day 5 \
-    --auto-skip-seconds 0.001 \
+    --seconds-per-day "$seconds_per_day" \
+    --auto-skip-seconds 0.1 \
     --title "$title" \
-    --disable-auto-rotate \
     --camera-mode overview \
     --user-friction 1 \
+    --user-scale 1.1 \
     --max-user-speed 15 \
-    --filename-time 20 \
-    --highlight-users \
-    --time-scale 4 \
-    --user-scale 1.2 \
+    --filename-time 5 \
+    --file-font-size 12 \
+    --time-scale "$time_scale" \
     --file-idle-time 0 \
-    --highlight-dirs \
-    --dir-name-depth 2 \
     --key \
     --highlight-users \
     --highlight-dirs \
     --dir-name-position 1 \
-    --dir-name-depth 3 \
-    --bloom-multiplier 1.5 \
-    --bloom-intensity 0.5 \
+    --dir-name-depth 10 \
+    --dir-font-size 16 \
+    --caption-offset 10 \
+    --padding 1 \
+    --logo "$logo" \
+    --hide bloom \
     $hide_option \
     --user-image-dir "$avatars_dir" \
     -${resolution} -o - | \
-ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf "$compression_level" -threads 0 -bf 0 "$output_file"
+ffmpeg -y -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf "$compression_level" -threads 0 -bf 0 -shortest "$output_file"
 
-# Delete the custom logs
+# Check if background music file exists and conditionally add it to the video
+if [ -f "$background_music" ]; then
+    ffmpeg -i "$output_file" -i "$background_music" -c:v copy -c:a aac -strict experimental -shortest "temp_$output_file"
+    if [ -f "temp_$output_file" ]; then
+        mv "temp_$output_file" "$output_file"
+    fi
+fi
+
+# Delete the temporary directory
 rm -r "$tmp_dir"

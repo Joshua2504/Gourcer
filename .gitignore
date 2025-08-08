@@ -1,8 +1,28 @@
-# Gource target file
+# video files
 gource.mp4
 
-# macOS
+# macOS files
 .DS_Store
 
-# avatars
+# user avatars
 avatars/
+
+# usernames file
+usernames.conf
+
+# music files
+*.mp3
+*.wav
+*.ogg
+*.flac
+
+# image files that are not inside the avatars directory
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.svg
+*.ico
+*.webp
