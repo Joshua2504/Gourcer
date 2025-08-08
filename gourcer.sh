@@ -51,11 +51,45 @@ fi
 # Generate Gource logs for each repository
 for repo in $repos; do
     repo_name=$(basename "$repo")
-    gource --output-custom-log - "$repo" | awk -v repo="$repo_name" 'BEGIN {FS=OFS="|"} {$4=repo "/" $4}1' > "${tmp_dir}/gource-${repo_name}.txt"
+    
+    # Check if the repository has any commits
+    cd "$repo"
+    if ! git rev-parse --verify HEAD >/dev/null 2>&1; then
+        echo "Skipping $repo_name - no commits found"
+        cd - >/dev/null
+        continue
+    fi
+    cd - >/dev/null
+    
+    # Try to generate gource log, skip if it fails
+    if ! gource --output-custom-log - "$repo" 2>/dev/null | awk -v repo="$repo_name" 'BEGIN {FS=OFS="|"} {$4=repo "/" $4}1' > "${tmp_dir}/gource-${repo_name}.txt"; then
+        echo "Skipping $repo_name - failed to generate gource log"
+        rm -f "${tmp_dir}/gource-${repo_name}.txt"
+        continue
+    fi
+    
+    # Check if the log file has content
+    if [ ! -s "${tmp_dir}/gource-${repo_name}.txt" ]; then
+        echo "Skipping $repo_name - empty log generated"
+        rm -f "${tmp_dir}/gource-${repo_name}.txt"
+    fi
 done
 
 # Combine all repository logs into a single log file
-cat ${tmp_dir}/gource-* | sort -n > ${tmp_dir}/combined.txt
+if ls ${tmp_dir}/gource-*.txt >/dev/null 2>&1; then
+    cat ${tmp_dir}/gource-*.txt | sort -n > ${tmp_dir}/combined.txt
+else
+    echo "No valid repository logs found. Exiting."
+    rm -r "$tmp_dir"
+    exit 1
+fi
+
+# Check if combined log has content
+if [ ! -s "${tmp_dir}/combined.txt" ]; then
+    echo "Combined log file is empty. No commits found in any repositories."
+    rm -r "$tmp_dir"
+    exit 1
+fi
 
 # Check if usernames.conf exists and read username replacements if it does
 if [ -f "$usernames_file" ]; then
@@ -89,7 +123,7 @@ gource ${tmp_dir}/combined.txt \
     --highlight-dirs \
     --dir-name-position 1 \
     --dir-name-depth 10 \
-    --dir-font-size 16 \
+    --dir-font-size 10 \
     --caption-offset 10 \
     --padding 1 \
     --logo "$logo" \
