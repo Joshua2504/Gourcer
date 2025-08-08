@@ -25,17 +25,17 @@ print_error() {
 }
 
 # Check if configuration file exists
-if [ ! -f "org-config.conf" ]; then
-    print_error "Configuration file 'org-config.conf' not found!"
-    print_error "Please copy 'org-config.conf.example' to 'org-config.conf' and configure it."
+if [ ! -f "config.conf" ]; then
+    print_error "Configuration file 'config.conf' not found!"
+    print_error "Please copy 'config.conf.example' to 'config.conf' and configure it."
     exit 1
 fi
 
 # Load configuration
-source "org-config.conf"
+source "config.conf"
 
 if [ -z "$GITHUB_ORG" ]; then
-    print_error "GITHUB_ORG is not set in org-config.conf"
+    print_error "GITHUB_ORG is not set in config.conf"
     exit 1
 fi
 

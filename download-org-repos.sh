@@ -13,8 +13,8 @@ SKIP_EXISTING=true  # Set to true to skip repositories that already exist locall
 GIT_ONLY=true  # Set to true to keep only .git folder (saves disk space, sufficient for Gource)
 
 # Load configuration from file if it exists
-if [ -f "org-config.conf" ]; then
-    source "org-config.conf"
+if [ -f "config.conf" ]; then
+    source "config.conf"
 fi
 
 # Colors for output

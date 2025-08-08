@@ -3,23 +3,42 @@
 # Gourcer - A script to generate a Gource visualization of multiple Git repositories
 # Author: Joshua Tobias Treudler (Joshua2504)
 
-# Settings for the Gource visualization
-title="Development Visualization" # Title of the visualization (shown in the left-down corner)
-logo="./sylent-logo-med.png" # Path to the logo file (shown in the right-down corner)
-resolution="1280x720" # Resolution of the output video
-output_file="gource.mp4" # Output file name
-compression_level="20" # between 0 and 51 (lossless)
-hide_usernames=false # Set to true to hide usernames in the visualization
-time_scale="1.2" # between 0.1 and 4.0
-seconds_per_day="0.4" # between 0.1 and 4.0
-background_music="music.mp3" # Path to the background music file
+# Default settings for the Gource visualization (can be overridden by config.conf)
+TITLE="Development Visualization" # Title of the visualization (shown in the left-down corner)
+LOGO_PATH="./sylent-logo-med.png" # Path to the logo file (shown in the right-down corner)
+RESOLUTION="1280x720" # Resolution of the output video
+OUTPUT_FILE="gource.mp4" # Output file name
+COMPRESSION_LEVEL="20" # between 0 and 51 (lossless)
+HIDE_USERNAMES=false # Set to true to hide usernames in the visualization
+TIME_SCALE="1.2" # between 0.1 and 4.0
+SECONDS_PER_DAY="0.4" # between 0.1 and 4.0
+BACKGROUND_MUSIC="music.mp3" # Path to the background music file
+AVATARS_DIR="./assets/avatars" # Directory for custom avatars
+USERNAMES_FILE="usernames.conf" # Username replacements file
+
+# Load configuration from file if it exists
+if [ -f "config.conf" ]; then
+    source "config.conf"
+fi
+
+# Use config variables (maintain backward compatibility with hardcoded variable names)
+title="$TITLE"
+logo="$LOGO_PATH"
+resolution="$RESOLUTION"
+output_file="$OUTPUT_FILE"
+compression_level="$COMPRESSION_LEVEL"
+hide_usernames="$HIDE_USERNAMES"
+time_scale="$TIME_SCALE"
+seconds_per_day="$SECONDS_PER_DAY"
+background_music="$BACKGROUND_MUSIC"
+avatars_dir="$AVATARS_DIR"
+usernames_file="$USERNAMES_FILE"
 
 # Create a temporary directory
 tmp_dir="/tmp/gourcer"
 mkdir -p "$tmp_dir"
 
 # Create a directory for custom avatars
-avatars_dir="./avatars"
 mkdir -p "$avatars_dir"
 
 # Find all Git repositories within the parent directory and org-repos directory
@@ -39,10 +58,10 @@ done
 cat ${tmp_dir}/gource-* | sort -n > ${tmp_dir}/combined.txt
 
 # Check if usernames.conf exists and read username replacements if it does
-if [ -f usernames.conf ]; then
+if [ -f "$usernames_file" ]; then
     while IFS='=' read -r original_username new_username; do
         sed -i '' "s/${original_username}/${new_username}/g" ${tmp_dir}/combined.txt
-    done < usernames.conf
+    done < "$usernames_file"
 fi
 
 # Check if hide_usernames is set to true and set the appropriate option

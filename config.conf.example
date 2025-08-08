@@ -1,0 +1,64 @@
+# Gourcer Configuration File
+# Copy this file to 'config.conf' and customize the values
+
+# ==============================================
+# GitHub Organization Repository Downloader
+# ==============================================
+
+# GitHub organization name (required for org downloads)
+GITHUB_ORG="your-organization-name"
+
+# GitHub personal access token (optional but recommended)
+# This provides access to private repositories and higher API rate limits
+# Generate one at: https://github.com/settings/tokens
+GITHUB_TOKEN=""
+
+# Directory where repositories will be cloned
+CLONE_DIR="./org-repos"
+
+# Use SSH instead of HTTPS for cloning (requires SSH keys set up)
+USE_SSH=true
+
+# Skip repositories that already exist locally
+SKIP_EXISTING=true
+
+# Keep only .git folder (recommended for Gource)
+# This saves significant disk space as Gource only needs git history
+GIT_ONLY=true
+
+# ==============================================
+# Gource Visualization Settings
+# ==============================================
+
+# Title of the visualization (shown in the left-down corner)
+TITLE="Development Visualization"
+
+# Path to the logo file (shown in the right-down corner)
+LOGO_PATH="./assets/gourcer-light.png"
+
+# Resolution of the output video
+RESOLUTION="1280x720"
+
+# Output file name
+OUTPUT_FILE="gource.mp4"
+
+# Video compression level (between 0 and 51, lower = higher quality)
+COMPRESSION_LEVEL="20"
+
+# Set to true to hide usernames in the visualization
+HIDE_USERNAMES=false
+
+# Time scale (between 0.1 and 4.0)
+TIME_SCALE="1.2"
+
+# Seconds per day (between 0.1 and 4.0)
+SECONDS_PER_DAY="0.4"
+
+# Path to the background music file (optional)
+BACKGROUND_MUSIC="./assets/music/music.mp3"
+
+# Directory for custom user avatars
+AVATARS_DIR="./assets/avatars"
+
+# Username replacements file (optional)
+USERNAMES_FILE="usernames.conf"
