@@ -46,7 +46,7 @@ fi
 # Generate the Gource visualization video with additional details
 gource ${tmp_dir}/combined.txt \
     --seconds-per-day 5 \
-    --auto-skip-seconds 0.1 \
+    --auto-skip-seconds 0.001 \
     --title "$title" \
     --disable-auto-rotate \
     --camera-mode overview \
